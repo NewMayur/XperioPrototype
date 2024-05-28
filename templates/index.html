@@ -1,0 +1,38 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Control</title>
+</head>
+<body>
+    <h2>Device Control Panel</h2>
+    <img id="myImage" src="{{ url_for('static', filename='pic_bulboff.gif') }}" width="100" height="180">
+    <p>Click the light bulb to turn on/off the light.</p>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function changeImage(status) {
+            var image = document.getElementById('myImage');
+            if (status === "on") {
+                image.src = "{{ url_for('static', filename='pic_bulbon.gif') }}";
+            } else {
+                image.src = "{{ url_for('static', filename='pic_bulboff.gif') }}";
+            }
+        }
+
+        $('#myImage').click(function() {
+            var currentStatus = $(this).attr('src').includes('bulbon') ? 'off' : 'on';
+            $.ajax({
+                url: '/devices/control',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ id: 1, status: currentStatus }),
+                success: function(response) {
+                    changeImage(currentStatus);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
