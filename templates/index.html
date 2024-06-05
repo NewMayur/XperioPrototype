@@ -6,9 +6,17 @@
     <title>Device Control</title>
 </head>
 <body>
+    <h3>All Devices</h3>
+    <ul>
+        {% for device in devices %}
+            <li>{{ device }}</li>
+        {% endfor %}
+    </ul>
+
     <h2>Device Control Panel</h2>
     <img id="myImage" src="{{ url_for('static', filename='pic_bulboff.gif') }}" width="100" height="180">
     <p>Click the light bulb to turn on/off the light.</p>
+<!--    <p id="deviceName">Device Name: XYZ</p> &lt;!&ndash; Add this line to display the device name &ndash;&gt;-->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>

@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from pydantic import ValidationError
+from flask import Flask, jsonify, render_template
 
 from models import Device
 
@@ -12,21 +13,26 @@ devices = []
 def home():
     return render_template('index.html')
 
-@app.route('/devices', methods=['POST'])
+
+@app.route('/add-device', methods=['POST'])
 def add_device():
     # Learning Comment:
-    # Flask routes handle HTTP requests. Here, we're defining a route to add a new device.
-    device_data = request.json
-    try:
-        device = Device(**device_data)
-        devices.append(device.dict())
-        return jsonify(device.dict()), 201
-    except ValidationError as e:
-        return e.json(), 400
+    # Flask routes handle HTTP requests. Here, we're defining a route to add new devices.
+    devices_data = request.json
+    added_devices = []
+    for device_data in devices_data:
+        try:
+            device = Device(**device_data)
+            devices.append(device.dict())
+            added_devices.append(device.dict())
+        except ValidationError as e:
+            return e.json(), 400
+    return jsonify(added_devices), 201
 
 @app.route('/devices', methods=['GET'])
 def list_devices():
-    return jsonify(devices)
+    # return jsonify(devices)
+    return render_template('index.html', devices=devices)
 
 @app.route('/devices/<int:device_id>', methods=['PUT'])
 def update_device(device_id):
